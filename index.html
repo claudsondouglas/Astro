@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Astro</title>
+    <style>
+      html,body{margin:0;height:100%;overflow:hidden;background:#1e1b18;font:14px system-ui,sans-serif;color:#eee}
+      canvas{display:block}
+      #gear{position:fixed;top:12px;right:12px;width:36px;height:36px;display:grid;place-items:center;border:0;border-radius:8px;background:#0006;color:#eee;cursor:pointer}
+      #gear:hover{background:#000a}
+      #settings{inset:unset;top:56px;right:12px;margin:0;width:220px;padding:12px;border:1px solid #fff2;border-radius:10px;background:#2a2622;color:#eee}
+      #settings h3{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#aaa}
+      #ws-list{list-style:none;margin:0 0 8px;padding:0}
+      #ws-list button{width:100%;text-align:left;padding:6px 8px;border:0;border-radius:6px;background:none;color:inherit;font:inherit;cursor:pointer}
+      #ws-list button:hover{background:#fff1}
+      #ws-list button[aria-current]{background:#d9775733;color:#f0a58a}
+      #ws-form{display:flex;gap:6px}
+      #ws-form input{flex:1;min-width:0;padding:6px 8px;border:1px solid #fff2;border-radius:6px;background:#1e1b18;color:inherit;font:inherit}
+      #ws-form button{padding:0 10px;border:0;border-radius:6px;background:#d97757;color:#fff;font:inherit;cursor:pointer}
+      #room-menu{inset:unset;margin:0;padding:4px;border:1px solid #fff2;border-radius:8px;background:#2a2622;color:#eee}
+      #room-menu button{display:block;padding:6px 12px;border:0;border-radius:6px;background:none;color:inherit;font:inherit;cursor:pointer}
+      #room-menu button:hover{background:#fff1}
+      #edit-hint{position:fixed;top:12px;left:50%;translate:-50% 0;padding:6px 12px;border-radius:8px;background:#d97757;color:#fff;pointer-events:none}
+    </style>
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <button id="gear" popovertarget="settings" aria-label="Configurações">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    <div id="settings" popover>
+      <h3>Workspaces</h3>
+      <ul id="ws-list"></ul>
+      <form id="ws-form">
+        <input name="name" placeholder="Novo workspace" required maxlength="30" autocomplete="off" />
+        <button aria-label="Criar workspace">+</button>
+      </form>
+    </div>
+    <div id="room-menu" popover><button id="room-edit">Editar</button><button id="room-delete">Apagar</button></div>
+    <div id="edit-hint" hidden></div>
+  </body>
+</html>
