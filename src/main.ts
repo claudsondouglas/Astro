@@ -145,7 +145,7 @@ function cellsIn(parts: Rect[]) {
 // Paredes (0.2 de espessura, pra fora) em toda borda do contorno, emendando células vizinhas numa parede só;
 // as de +x/+z ganham userData.front. A +z mais comprida tem uma porta de DOOR no meio
 const DOOR = 2;
-function wallsOf(parts: Rect[]): (Rect & { front: boolean })[] {
+function wallsOf(parts: Rect[], cut = true): (Rect & { front: boolean })[] {
   const cells = cellsIn(parts), walls: (Rect & { front: boolean })[] = [], T = 0.2;
   // borda da célula (x, z) virada pro lado -(dx, dz) sem piso do outro lado
   const open = (x: number, z: number, dx: number, dz: number) => cells.has(key(x, z)) && !cells.has(key(x - dx, z - dz));
@@ -170,7 +170,7 @@ function wallsOf(parts: Rect[]): (Rect & { front: boolean })[] {
       }
     }
   }
-  if (door) { // corta a porta no meio (contando em células, sem as pontas esticadas), deixando os dois pedaços
+  if (door && cut) { // corta a porta no meio (contando em células, sem as pontas esticadas), deixando os dois pedaços
     const { wall: d, x, n } = door, a = x + Math.floor((n - DOOR) / 2);
     walls.splice(walls.indexOf(d), 1, { ...d, w: a - d.x }, { ...d, x: a + DOOR, w: d.x + d.w - a - DOOR });
   }
@@ -219,7 +219,8 @@ function addRoom(i: number) {
   }
   const room = new THREE.Group(), ws = workspaces[i];
   const tone = FLOOR.clone().offsetHSL(i * 0.13, 0, 0).getHex(); // cada sala com um tom
-  for (const r of ws.parts) if (r.w > 0 && r.d > 0) {
+  // piso também embaixo das paredes e da porta (paredes sem o corte da porta)
+  for (const r of [...ws.parts, ...wallsOf(ws.parts, false)]) if (r.w > 0 && r.d > 0) {
     const floor = box(r.w, 0.2, r.d, tone);
     floor.position.set(r.x + r.w / 2, -0.1, r.z + r.d / 2);
     floor.castShadow = false; // nada embaixo do piso
